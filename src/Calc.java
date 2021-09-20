@@ -1,3 +1,4 @@
+
 import java.util.function.BinaryOperator;
 
 public class Calc {
