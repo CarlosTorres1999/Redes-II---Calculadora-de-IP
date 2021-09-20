@@ -1,6 +1,8 @@
 # Redes-II---Calculadora-de-IP
 
-Informe Carlos Cristoba Torres Carballo
+# Informe Carlos Cristoba Torres Carballo
+
+El programa fue hecho con el IDE de Eclipse
 
 Funcionamiento del programa
 
