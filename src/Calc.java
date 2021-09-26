@@ -1,6 +1,9 @@
 
 import java.util.function.BinaryOperator;
 
+import Errores.IPException;
+import Errores.MaskException;
+
 public class Calc {
 	private BinaryOperator<Integer> network;
 	private BinaryOperator<Integer> broadcast;
@@ -89,7 +92,7 @@ public class Calc {
 							
 							for(int k = 1; k < octetoBinario.length(); k++) {
 								if(octetoBinario.charAt(k) == '1') {
-									throw new Error("Error al cargar mascara larga, en el octeto numero: "+(i + 1 ));
+									throw new MaskException("Error al cargar mascara larga, en el octeto numero: "+(i + 1 ));
 								}
 							}
 						}
@@ -98,12 +101,12 @@ public class Calc {
 					if (evaluarOcteto(value)) {
 						resultado[i] = value;
 					} else {
-						throw new Error("Mascara no valida, error en el octeto nro :" + (i + 1)
+						throw new MaskException("Mascara no valida, error en el octeto nro :" + (i + 1)
 								+ "Ingrese nuevamente, octeto <= 255, octeto >= 0");
 					}
 				}
 			} else {
-				throw new Error("Mascara no valida, argumentos no valido, ejecute nuevamente el programa");
+				throw new MaskException("Mascara no valida, argumentos no valido, ejecute nuevamente el programa");
 			}
 
 			return resultado;
@@ -125,13 +128,13 @@ public class Calc {
 				if (evaluarOcteto(value)) {
 					resultado[i] = value;
 				} else {
-					throw new Error("Ip no valido, vuelva a cargar");
+					throw new IPException("Ip no valido, vuelva a cargar");
 				}
 
 			}
 			return resultado;
 		} else {
-			throw new Error("IP no valido");
+			throw new IPException("IP no valido");
 		}
 
 	}
@@ -178,6 +181,29 @@ public class Calc {
 			resultado[i] = broadcast.apply(arg1[i], mascaraInvertida[i]);
 		}
 
+		return resultado;
+	}
+	
+	/**
+	 * Funcion para invertir mascara
+	 * @param mascara mascara en decimal
+	 * @return mascara en complemento a1
+	 */
+	public int[] invertirMascara(int[] mascara) {
+		int[] resultadoBinario = new int[4];
+		int[] resultado = new int[4];
+		for(int i = 0; i < mascara.length; i++) {
+			String octetoViejoStr = completarOcteto(mascara[i]);
+			
+			int octetoNuevo = Integer.parseInt(
+					octetoViejoStr
+					.replace("0", "2")
+					.replace("1", "0")
+					.replace("2","1"));
+			resultadoBinario[i] = octetoNuevo;
+		}
+		resultado = binarioADecimal(resultadoBinario);
+		
 		return resultado;
 	}
 	
@@ -251,6 +277,7 @@ public class Calc {
 		}
 	}
 	
+	
 	// Metodos privados, Funciones que se implementan en otras que son publicas
 	private static boolean evaluarOcteto(int octeto) {
 		return octeto < 0 || octeto > 255 ? false : true;
@@ -269,23 +296,7 @@ public class Calc {
 		return mascara.contains(".") ? false : true;
 	}
 	
-	private int[] invertirMascara(int[] mascara) {
-		int[] resultadoBinario = new int[4];
-		int[] resultado = new int[4];
-		for(int i = 0; i < mascara.length; i++) {
-			String octetoViejoStr = completarOcteto(mascara[i]);
-			
-			int octetoNuevo = Integer.parseInt(
-					octetoViejoStr
-					.replace("0", "2")
-					.replace("1", "0")
-					.replace("2","1"));
-			resultadoBinario[i] = octetoNuevo;
-		}
-		resultado = binarioADecimal(resultadoBinario);
-		
-		return resultado;
-	}
+
 	
 	private int[] crearMascaraLarga(int mascaraCorta) {
 		
