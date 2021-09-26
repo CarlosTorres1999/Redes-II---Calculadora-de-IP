@@ -60,6 +60,7 @@ public class Servidor {
 				dos.writeUTF("Broadcast en decimal: "+Calc.mostrarOctetosDecimal(broadcast));
 				dos.writeUTF("Broadcast en binario: "+Calc.mostrarOctetosBinario(broadcast));
 				
+				cliente.close();
 				
 				
 				
