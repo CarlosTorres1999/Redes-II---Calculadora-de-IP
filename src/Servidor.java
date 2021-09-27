@@ -1,6 +1,7 @@
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -11,16 +12,18 @@ public class Servidor {
 	public static void main(String[] args) throws IOException {
 		
 		Calc calculadora = new Calc();
+		OutputStream out;
 		DataInputStream dis;
 		DataOutputStream dos;
 		try {
+			
 			ServerSocket servidor = new ServerSocket(Integer.parseInt(args[0]));
 			System.out.println("servidor corriendo");
 			Socket cliente = servidor.accept();
-			
+			out = cliente.getOutputStream();
 			System.out.println("cliente conectado");
 			dis = new DataInputStream(cliente.getInputStream());
-			dos = new DataOutputStream(cliente.getOutputStream());
+			dos = new DataOutputStream(out);
 			
 			String[] expresion = dis.readUTF().split("/");
 			
@@ -37,37 +40,43 @@ public class Servidor {
 					calculadora.setIp(ip);
 					calculadora.setMascara(masc);
 				}catch(IPException e) {
-					dos.writeUTF("ip no valida "+e.getMessage());
+					dos.writeBytes(e.getMessage());
 					dos.close();
 					dis.close();
 					cliente.close();
+					System.exit(-1);
 				}catch(MaskException e) {
-					dos.writeUTF("mascara no valida "+e.getMessage());
+					dos.writeBytes(e.getMessage());
 					dos.close();
 					dis.close();
 					cliente.close();
+					System.exit(-1);
 				}
 				
 				int[] network = calculadora.calcularNetwork(ip, masc);
 				int[] broadcast = calculadora.calcularBroadcast(ip, masc);
 				int[] mascaraInvertida = calculadora.invertirMascara(masc);
 				
-				dos.writeUTF("IP en binario: "+Calc.mostrarOctetosBinario(calculadora.getIp()));
-				dos.writeUTF("Masc en Binario: "+Calc.mostrarOctetosBinario(calculadora.getMascara()));
-				dos.writeUTF("NetWork Decimal: "+Calc.mostrarOctetosDecimal(network));
-				dos.writeUTF("NetWork Binario: "+Calc.mostrarOctetosBinario(network));
-				dos.writeUTF("Mascara complementada: "+Calc.mostrarOctetosBinario(mascaraInvertida));
-				dos.writeUTF("Broadcast en decimal: "+Calc.mostrarOctetosDecimal(broadcast));
-				dos.writeUTF("Broadcast en binario: "+Calc.mostrarOctetosBinario(broadcast));
 				
+				
+				dos.writeBytes("IP en binario: "+Calc.mostrarOctetosBinario(calculadora.getIp()));
+				dos.writeBytes("\nMasc en Binario: "+Calc.mostrarOctetosBinario(calculadora.getMascara()));
+				dos.writeBytes("\nNetWork Decimal: "+Calc.mostrarOctetosDecimal(network));
+				dos.writeBytes("\nNetWork Binario: "+Calc.mostrarOctetosBinario(network));
+				dos.writeBytes("\nMascara complementada: "+Calc.mostrarOctetosBinario(mascaraInvertida));
+				dos.writeBytes("\nBroadcast en decimal: "+Calc.mostrarOctetosDecimal(broadcast));
+				dos.writeBytes("\nBroadcast en binario: "+Calc.mostrarOctetosBinario(broadcast));
+				
+				dos.close();
 				cliente.close();
 				
 				
 				
  			}else {
-				dos.writeUTF("Expresion no valida, vuelva a ejecutar el programa");
+				dos.writeBytes("Expresion no valida, vuelva a ejecutar el programa");
 				dos.close();
 				cliente.close();
+				System.exit(-1);
 			}
 			
 		} catch (NumberFormatException e) {

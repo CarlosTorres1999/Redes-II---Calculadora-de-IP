@@ -33,19 +33,27 @@ public class Cliente {
 			
 			
 			
-			while(skCliente.isConnected()) {
-				String flujoEntrada = dis.readUTF();
-				System.out.println(flujoEntrada);
+			
+			boolean band = true;
+			while(band == true) {
+				String flujoEntrada = dis.readLine();
+				if(flujoEntrada == null) {
+					band = false;
+				}else {
+					System.out.println(flujoEntrada);
+				}
+				
 			}
 			
+			dis.close();
 			skCliente.close();
 			
 			
 			
 		} catch (UnknownHostException e) {
-			System.err.println("Error, Host Desconocido "+e.toString());
+			System.err.println("Error, Host Desconocido "+e.getMessage());
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.err.println("Error en la entrada/salida de datos "+e.getMessage());
 		}
 	}
 

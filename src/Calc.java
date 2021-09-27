@@ -72,7 +72,7 @@ public class Calc {
 			if (evaluarMasc(masc)) {
 				return this.crearMascaraLarga(masc);
 			} else {
-				throw new Error(
+				throw new MaskException(
 						"Mascara No valida, vuelva a ejecutar el programa y pase como corresponda masc < 32 or masc >= 0");
 			}
 		} else {

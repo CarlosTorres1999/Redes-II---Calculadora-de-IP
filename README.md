@@ -2,13 +2,27 @@
 
 # Informe Carlos Cristobal Torres Carballo
 
-El programa fue hecho con el IDE de Eclipse
+1) Si solo se quiere ejecutar la calculadora sin Sockets
+	Compilar y Ejecutar el Archivo Calc.java
+	
+	Javac Calc.java
+	Java Calc 192.172.1.2/12
+	
+2) Si se quiere ejecutar con Sockets
+	- Compilar y Ejecutar primero el Servidor (archivo Servidor.java)
+	- Luego Compilar y Ejecutar el archivo Cliente.java
+	
+	Javac Servidor.java
+	Java Servidor 8000
+	
+	Javac Cliente.java
+	Java Cliente #Host #Port
+	
+	
+Explicacion de los archivos:
 
-Funcionamiento del programa
+El Paquete "Errores" contiene las clases con las excepciones que lanzan el programa
 
-Compilar y ejecutar Calc.java
 
-Por ejemplo javac Calc 1.2.3.80/255.255.255.128
 
-Calcula el Network y el Broadcast, en decimal y binario, si pasas mal un argumento, 
-lanza un error que especifica que argumento se paso mal Ej: "Argumento No Valido"
+
